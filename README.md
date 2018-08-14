@@ -1,5 +1,5 @@
-# Travelist
-Travelist is a web application where users can save in a map the places they have been during their trips and explore other maps.
+# TRAVELIST
+Travelist is a web application where users can save in a map the places they have been during their trips and explore maps from other users.
 
 ## User stories
   **404:** As an anon/user I can see a 404 page if I try to reach a page that does not exist so that I know it's my fault.
@@ -127,3 +127,7 @@ Travelist is a web application where users can save in a map the places they hav
   
   **Backlog:**
   - POST /favorite
+
+## Links
+- Frontend of the project: https://github.com/balpaula/project-m3-frontend
+- Trello: https://trello.com/b/9ahCkyVh/travelist
