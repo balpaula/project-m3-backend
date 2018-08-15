@@ -5,7 +5,7 @@ const User = require('../models/user');
 const Trip = require('../models/trip');
 const Place = require('../models/place');
 
-router.get('/trips/list', (req, res, next) => {
+router.get('/list', (req, res, next) => {
     const user = req.session.currentUser;
     Trip.find({owner: user._id})
         .populate('owner')
@@ -15,7 +15,7 @@ router.get('/trips/list', (req, res, next) => {
         .catch(next)
 });
 
-router.get('/trips/:id', (req, res, next) => {
+router.get('/:id', (req, res, next) => {
     const { id } = req.params;
     Trip.findById(id)
         .populate('places')
@@ -30,7 +30,7 @@ router.get('/trips/:id', (req, res, next) => {
         .catch(next);
 });
 
-router.post('/trips/new', (req, res, next) => {
+router.post('/new', (req, res, next) => {
     const user = req.session.currentUser;
 
     const name = req.body.name;
@@ -38,6 +38,7 @@ router.post('/trips/new', (req, res, next) => {
 
     const newTrip = new Trip({
         name,
+        description,
         places: [],
         owner: user._id
     });
@@ -49,7 +50,7 @@ router.post('/trips/new', (req, res, next) => {
         .catch(next);
 })
 
-router.post('/trips/:id/addplace', (req, res, next) => {
+router.post('/:id/addplace', (req, res, next) => {
     const { id } = req.params;
 
     const name = req.body.name;

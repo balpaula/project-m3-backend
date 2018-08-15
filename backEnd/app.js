@@ -9,6 +9,7 @@ const MongoStore = require('connect-mongo')(session);
 const cors = require('cors');
 
 const authRouter = require('./routes/auth');
+const tripsRouter = require('./routes/trips');
 
 const app = express();
 
@@ -37,6 +38,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api/auth', authRouter);
+app.use('/api/trips', tripsRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
