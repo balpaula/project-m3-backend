@@ -8,7 +8,6 @@ const Place = require('../models/place');
 router.get('/list', (req, res, next) => {
     const user = req.session.currentUser;
     Trip.find({owner: user._id})
-        .populate('owner')
         .then(trips => {
             return res.json(trips);
         })
@@ -50,8 +49,8 @@ router.post('/new', (req, res, next) => {
         .catch(next);
 })
 
-router.post('/:id/addplace', (req, res, next) => {
-    const { id } = req.params;
+router.post('/addplace', (req, res, next) => {
+    const  id  = req.body.id;
 
     const name = req.body.name;
     const coordinates = req.body.coordinates;
@@ -68,7 +67,7 @@ router.post('/:id/addplace', (req, res, next) => {
         .then(() => {
             Trip.findById(id)
                 .then(trip => {
-                    trip.places.push(newPlace)
+                    trip.places.push(newPlace._id)
                 })
         })
         .catch(next);
