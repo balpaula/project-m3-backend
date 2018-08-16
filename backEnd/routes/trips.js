@@ -61,14 +61,15 @@ router.post('/:id/addplace', (req, res, next) => {
         name,
         coordinates,
         description,
-        date: new Date()
+        date: Date.now()
     });
 
     newPlace.save()
         .then(() => {
             Trip.findById(id)
+                .populate('places')
                 .then(trip => {
-                    trip.places.push(newPlace._id);
+                    trip.places.push(newPlace);
                     trip.save()
                         .then(() => {
                             res.json(trip.places);
