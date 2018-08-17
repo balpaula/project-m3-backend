@@ -7,6 +7,7 @@ const Place = require('../models/place');
 
 router.get('/list', (req, res, next) => {
     const user = req.session.currentUser;
+    console.log('user', user)
     Trip.find({owner: user._id})
         .then(trips => {
             return res.json(trips);
@@ -79,6 +80,5 @@ router.post('/:id/addplace', (req, res, next) => {
         .catch(next);
 
 });
-
 
 module.exports = router;
