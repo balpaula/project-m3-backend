@@ -2,6 +2,7 @@
 
 const mongoose = require("mongoose");
 const Schema   = mongoose.Schema;
+const ObjectId = Schema.Types.ObjectId;
 
 const userSchema = new Schema({
   username: {
@@ -16,6 +17,10 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
+  favorites: [{
+    type: ObjectId,
+    ref: 'Trip'
+  }]
 }, {
   timestamps: true
 });

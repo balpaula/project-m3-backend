@@ -7,13 +7,22 @@ const Place = require('../models/place');
 
 router.get('/list', (req, res, next) => {
     const user = req.session.currentUser;
-    console.log('user', user)
     Trip.find({owner: user._id})
         .then(trips => {
             return res.json(trips);
         })
         .catch(next)
 });
+
+router.get('/favorites', (req, res, next) => {
+    const user = req.session.currentUser;
+    console.log('backend');
+    User.findById(user._id)
+        .then(user => {
+            console.log('user favorites', user.favorites)
+            return res.json(user.favorites);
+        })
+})
 
 router.get('/:id', (req, res, next) => {
     const { id } = req.params;
@@ -52,7 +61,6 @@ router.post('/new', (req, res, next) => {
 
 router.post('/:id/addplace', (req, res, next) => {
     const { id } = req.params;
-    console.log('backend', id)
 
     const name = req.body.name;
     const coordinates = req.body.coordinates;
@@ -80,5 +88,36 @@ router.post('/:id/addplace', (req, res, next) => {
         .catch(next);
 
 });
+
+router.post('/:id/favorite', (req, res, next) => {
+    const { id } = req.params;
+    const user = req.session.currentUser;
+
+    User.findById(user._id)
+        .then(user => {
+            user.favorites.push(id);
+            user.save()
+                .then(() => {
+                    res.json(user.favorites);
+                });
+        })
+        .catch(next);
+        
+});
+
+router.delete('/:id/favorite', (req, res, next) => {
+    const { id } = req.params;
+    const user = req.session.currentUser;
+
+    User.findById(user._id)
+        .then(user => {
+            user.favorites.splice(user.favorites.indexOf(id), 1);
+            user.save()
+                .then(() => {
+                    res.json(user.favorites);
+                });
+        })
+        .catch(next);
+})
 
 module.exports = router;
