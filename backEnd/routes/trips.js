@@ -16,8 +16,8 @@ router.get('/list', (req, res, next) => {
 
 router.get('/favorites', (req, res, next) => {
     const user = req.session.currentUser;
-    console.log('backend');
     User.findById(user._id)
+        .populate('favorites')
         .then(user => {
             console.log('user favorites', user.favorites)
             return res.json(user.favorites);
@@ -93,9 +93,9 @@ router.post('/:id/favorite', (req, res, next) => {
     const { id } = req.params;
     const user = req.session.currentUser;
 
-    User.findById(user._id)
+    
+    User.findByIdAndUpdate(user._id, {$push: {favorites: id}})
         .then(user => {
-            user.favorites.push(id);
             user.save()
                 .then(() => {
                     res.json(user.favorites);
@@ -109,9 +109,8 @@ router.delete('/:id/favorite', (req, res, next) => {
     const { id } = req.params;
     const user = req.session.currentUser;
 
-    User.findById(user._id)
+    User.findByIdAndUpdate(user._id, {$pull: {favorites: id}})
         .then(user => {
-            user.favorites.splice(user.favorites.indexOf(id), 1);
             user.save()
                 .then(() => {
                     res.json(user.favorites);
