@@ -8,6 +8,8 @@ const Place = require('../models/place');
 router.get('/list', (req, res, next) => {
     const user = req.session.currentUser;
     Trip.find({owner: user._id})
+        .populate('places')
+        .populate('owner')
         .then(trips => {
             return res.json(trips);
         })
@@ -19,7 +21,6 @@ router.get('/favorites', (req, res, next) => {
     User.findById(user._id)
         .populate('favorites')
         .then(user => {
-            console.log('user favorites', user.favorites)
             return res.json(user.favorites);
         })
 })
