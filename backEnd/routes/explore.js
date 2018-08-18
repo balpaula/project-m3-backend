@@ -1,11 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
-const User = require('../models/user');
 const Trip = require('../models/trip');
-const Place = require('../models/place');
 
 router.get('/', (req, res, next) => {
+    const user = req.session.currentUser;
     Trip.aggregate( [{ $sample: { size: 12 } }] )
         .then((randomTrips) => {
             res.json(randomTrips);
