@@ -17,6 +17,7 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
+  description: String,
   favorites: [{
     type: ObjectId,
     ref: 'Trip'
