@@ -16,6 +16,15 @@ router.get('/list', (req, res, next) => {
         .catch(next)
 });
 
+router.get('/user/:id', (req, res, next) => {
+    const { id } = req.params;
+    Trip.find({owner: id})
+        .then(trips => {
+            return res.json(trips);
+        })
+        .catch(next)
+})
+
 router.get('/favorites', (req, res, next) => {
     const user = req.session.currentUser;
     User.findById(user._id)

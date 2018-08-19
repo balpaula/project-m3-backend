@@ -5,7 +5,7 @@ const User = require('../models/user');
 
 router.get('/:username', (req, res, next) => {
     const { username } = req.params;
-    User.find({username})
+    User.findOne({username})
         .populate('favorites')
         .then((user) => {
             res.json(user);
