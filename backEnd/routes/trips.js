@@ -1,12 +1,10 @@
 const express = require('express');
-const multer = require('multer');
+
 const User = require('../models/user');
 const Trip = require('../models/trip');
 const Place = require('../models/place');
-const uploadCloud = require('../config/cloudinary.js')
+
 const router = express.Router();
-
-
 
 router.get('/list', (req, res, next) => {
     const user = req.session.currentUser;
