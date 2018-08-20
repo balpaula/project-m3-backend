@@ -13,6 +13,7 @@ const placeSchema = new Schema({
     required: true
   },
   description: String,
+  photo: String,
   date: Date,
 }, {
   timestamps: true
