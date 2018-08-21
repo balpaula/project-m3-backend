@@ -15,10 +15,18 @@ const profileRouter = require('./routes/profile');
 
 const app = express();
 
-app.use(cors({
-  credentials: true,
-  origin: [process.env.CLIENT_URL]
-}));
+// app.use(cors({
+//   credentials: true,
+//   origin: [process.env.CLIENT_URL]
+// }));
+
+app.use(function (req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin', process.env.CORS_URL);
+  res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  next();
+});
 
 app.use(session({
   store: new MongoStore({
