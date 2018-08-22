@@ -20,6 +20,8 @@ router.get('/list', (req, res, next) => {
 router.get('/user/:id', (req, res, next) => {
     const { id } = req.params;
     Trip.find({owner: id})
+        .populate('owner')
+        .populate('places')
         .then(trips => {
             return res.json(trips);
         })
@@ -35,6 +37,20 @@ router.get('/favorites', (req, res, next) => {
         })
 })
 
+router.get('/favorites/:id', (req, res, next) => {
+    const { id } = req.params;
+    User.findById(id)
+        .then(user => {
+            Trip.find({_id: {$in: user.favorites}})
+                .populate('owner')
+                .populate('places')
+                .then(favorites => {
+                    console.log(favorites)
+                    return res.json(favorites)
+                })
+        })
+})
+
 router.get('/:id', (req, res, next) => {
     const { id } = req.params;
     Trip.findById(id)
@@ -42,7 +58,7 @@ router.get('/:id', (req, res, next) => {
         .populate('owner')
         .then(trip => {
             if (trip) {
-                res.json(trip);
+                return res.json(trip);
             } else {
                 next(createError(404));
             }
@@ -65,7 +81,7 @@ router.post('/new', (req, res, next) => {
 
     newTrip.save()
         .then(() => {
-            res.json(newTrip);
+            return res.json(newTrip);
         })
         .catch(next);
 })
@@ -94,7 +110,7 @@ router.post('/:id/addplace', (req, res, next) => {
                     trip.places.push(newPlace);
                     trip.save()
                         .then(() => {
-                            res.json(trip.places);
+                            return res.json(trip.places);
                         })
                 })
         })
@@ -111,7 +127,7 @@ router.post('/:id/favorite', (req, res, next) => {
         .then(user => {
             user.save()
                 .then(() => {
-                    res.json(user.favorites);
+                    return res.json(user.favorites);
                 });
         })
         .catch(next);
@@ -126,7 +142,7 @@ router.delete('/:id/favorite', (req, res, next) => {
         .then(user => {
             user.save()
                 .then(() => {
-                    res.json(user.favorites);
+                    return res.json(user.favorites);
                 });
         })
         .catch(next);
