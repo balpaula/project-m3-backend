@@ -5,7 +5,10 @@ const Trip = require('../models/trip');
 
 router.get('/', (req, res, next) => {
     const user = req.session.currentUser;
-    Trip.aggregate( [{ $sample: { size: 12 } }] ) 
+    const favorites = user.favorites;
+    Trip.find({$and: [{owner: {$ne: user._id}}, {_id: {$nin: favorites}}]}).sort({updatedAt: -1}).limit(24)
+        .populate('owner')
+        .populate('places')
         .then((randomTrips) => {
             res.json(randomTrips);
         })
@@ -15,15 +18,12 @@ router.get('/', (req, res, next) => {
 router.get('/search/:text', (req, res, next) => {
     let { text } = req.params;
     let queryRegex = new RegExp(text, 'i');
-    Trip.find()
+    Trip.find({ name: queryRegex })
         .populate('owner')
         .populate('places')
-        .then(trips => {
-        Trip.find({ name: queryRegex })
-                .then(results => {
-                    console.log(results)
-                    res.json(results);
-                })
+        .then(results => {
+            console.log(results)
+            res.json(results);
         })
         .catch(error => {
             console.log(error)
